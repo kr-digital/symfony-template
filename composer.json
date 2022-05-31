@@ -1,9 +1,9 @@
 {
-  "name": "ddlzz/symfony-docker-website-skeleton",
+  "name": "reddevilhat/symfony",
   "type": "template",
-  "description": "A project template for Symfony application running inside of Docker containers for convenient development.",
+  "description": "Базовый template для Symfony проектов",
   "keywords": ["template"],
-  "homepage": "https://github.com/ddlzz/symfony-docker-website-skeleton",
+  "homepage": "https://github.com/RedDevilHat/symfony",
   "license": "MIT",
   "authors": [
     {
@@ -11,6 +11,18 @@
       "email": "ddlzz@yandex.ru",
       "homepage": "https://alyamovsky.com",
       "role": "Developer"
+    },
+    {
+      "name": "Rassamahin Nikita",
+      "email": "nrj.tomsk@yandex.ru",
+      "homepage": "https://github.com/RedDevilHat",
+      "role": "Developer"
+    },
+    {
+      "name": "KR Digital",
+      "email": "box@kr.digital",
+      "homepage": "https://kr.digital",
+      "role": "Maintainer"
     }
   ]
 }

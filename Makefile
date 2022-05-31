@@ -4,7 +4,7 @@ ifneq (,$(wildcard ./.env))
 endif
 
 # Run this command first
-init: configs-setup composer-install db-create db-migrations permissions-fix
+init: configs-setup builds-setup override-config composer-install db-create db-migrations permissions-fix
 
 up: docker-up
 down: docker-down
@@ -41,7 +41,7 @@ cs:
 	docker-compose -p $(DOCKER_PROJECT_TITLE) run --rm php-cli sh -c "php /app/vendor/bin/php-cs-fixer -v --allow-risky=yes --config=/app/.php_cs.dist fix /app/src/* /app/tests/*"
 
 psalm:
-	docker-compose -p $(DOCKER_PROJECT_TITLE) run --rm php-cli sh -c "php /app/vendor/bin/psalm*"
+	docker-compose -p $(DOCKER_PROJECT_TITLE) run --rm php-cli sh -c "php /app/vendor/bin/psalm /app/src/*"
 
 db-create:
 	docker-compose -p $(DOCKER_PROJECT_TITLE) run --rm php-cli sh -c "php /app/bin/console doctrine:database:create --if-not-exists"
@@ -56,8 +56,12 @@ configs-setup:
 	rm -r ./vendor composer.json composer.lock RUN_MAKE_INIT_COMMAND_PLEASE.md || true # Remove template root composer files, keep only the ./app ones
 	[ -f docker-compose.override.yaml ] && echo "Skip docker-compose.override.yaml" || cp docker-compose.override.yaml.dist docker-compose.override.yaml
 	[ -f ./app/.env.local ] && echo "Skip .env.local" || cp ./app/.env ./app/.env.local
+
+builds-setup:
 	./build_scripts/override_default_docker_env_vars.sh || true # Set random project title and host ports for Nginx/PostgreSQL
 	rm -r ./build_scripts || true
+
+override-config:
 	[ -f ./.env ] && echo "Skip docker .env" || cp ./.env.dist ./.env
 	[ -f ./app/phpunit.xml ] && echo "Skip phpunit.xml" || cp ./app/phpunit.xml.dist ./app/phpunit.xml
 	[ -d ./app/var/data/.composer ] && echo "./var/data/.composer exists" || mkdir -p ./app/var/data/.composer

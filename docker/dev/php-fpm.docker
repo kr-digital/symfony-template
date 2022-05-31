@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.0-fpm
 
 # Sessions are stored on disk by default so let's create a sessions dir
 RUN mkdir -p /var/www/sessions && chown -R www-data:www-data /var/www/sessions && \
@@ -10,7 +10,73 @@ RUN pecl install xdebug && \
     docker-php-ext-install -j$(nproc) pdo_pgsql && \
     docker-php-ext-enable xdebug
 
+RUN apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev
+
+RUN apt-get update --fix-missing --allow-releaseinfo-change  \
+  && apt-get install -y \
+             apt-utils \
+             man \
+             curl \
+             git \
+             bash \
+             vim \
+             zip unzip \
+             acl \
+             iproute2 \
+             dnsutils \
+             fonts-freefont-ttf \
+             fontconfig \
+             dbus \
+             openssh-client \
+             sendmail \
+             libfreetype6-dev \
+             libjpeg62-turbo-dev \
+             icu-devtools \
+             libicu-dev \
+             libmcrypt4 \
+             libmcrypt-dev \
+             libpng-dev \
+             zlib1g-dev \
+             libxml2-dev \
+             libzip-dev \
+             libonig-dev \
+             graphviz \
+             libcurl4-openssl-dev \
+             pkg-config \
+             libldap2-dev \
+             libpq-dev
+
+ENV EXT_AMQP_VERSION=master
+
+RUN apt-get -y install libpng-dev \
+                               libxml2-dev \
+                               librabbitmq-dev \
+                               libonig-dev \
+                               libzip-dev \
+                               libpq-dev \
+                               libxslt1-dev
+
+RUN docker-php-source extract \
+    && git clone --branch $EXT_AMQP_VERSION --depth 1 https://github.com/php-amqp/php-amqp.git /usr/src/php/ext/amqp \
+    && cd /usr/src/php/ext/amqp && git submodule update --init \
+    && docker-php-ext-install amqp
+
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-enable pcntl
+RUN docker-php-ext-install sockets
+RUN docker-php-ext-enable sockets
+
+RUN docker-php-ext-install intl
+RUN docker-php-ext-enable intl
+
+RUN docker-php-ext-install xsl
+
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install zip
+
 COPY ./php-fpm/default.ini /usr/local/etc/php/conf.d/default.ini
+
+RUN pecl config-set php_ini /etc/php.ini
 
 RUN echo 'php_admin_flag[display_errors] = on' >> /usr/local/etc/php-fpm.d/www.conf
 
