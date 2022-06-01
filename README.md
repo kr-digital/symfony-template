@@ -9,7 +9,7 @@
 
 # Quick Start
 
-1. `composer create-project ddlzz/symfony-docker-website-skeleton local_project_path`
+1. `composer create-project kr-digital/symfony-template local_project_path`
 2. `make init` - Обязательно запустить перед началом работы над проектом. До настраивает приложение, удаляет временные файлы.
 3. `make up`
 4. Все контейнеры по дефолту займут рандомные поля в диапазоне (47001-47999)
