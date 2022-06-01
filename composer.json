@@ -1,9 +1,9 @@
 {
-  "name": "reddevilhat/symfony",
+  "name": "kr-digital/symfony-template",
   "type": "template",
   "description": "Базовый template для Symfony проектов",
   "keywords": ["template"],
-  "homepage": "https://github.com/RedDevilHat/symfony",
+  "homepage": "https://github.com/kr-digital/symfony-template",
   "license": "MIT",
   "authors": [
     {
